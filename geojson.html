@@ -11,6 +11,9 @@
     <link rel="stylesheet" href="//unpkg.com/leaflet@1.5.1/dist/leaflet.css"/>
     <script type="text/javascript" src="//unpkg.com/leaflet@1.5.1/dist/leaflet.js"></script>
 	<script type="text/javascript" src="//code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+	<script type="text/javascript">
+		!function(e){e.fn.preloader=function(t){function r(){c=e(i.selector)}function n(){switch(i.type){case"document":default:setTimeout(function(){o()},i.delay)}}function o(){switch(i.removeType){case"fade":a();break;case"remove":default:u()}}function u(){return c.remove()}function a(){return c.fadeOut(i.fadeDuration,f())}function f(){return function(){c.remove()}}var i=e.extend({selector:"#preloader",type:"document",removeType:"fade",fadeDuration:750,delay:0},t),c=null;return r(),this.ready(function(){e(this).trigger("preloader:before"),n(),e(this).trigger("preloader:after")})}}(jQuery);
+	</script>
 	<script type="text/javascript" src="//cdn.jsdelivr.net/jquery.jssocials/1.4.0/jssocials.min.js"></script>
 	<link type="text/css" rel="stylesheet" href="//stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
 	<link type="text/css" rel="stylesheet" href="//cdn.jsdelivr.net/jquery.jssocials/1.4.0/jssocials.css" />
@@ -28,6 +31,7 @@
 		var municipal_id;
 
 		$(document).ready(function() {
+			$('window').preloader();
 
 			function prepareEmail(municipal_id){
 				var contact = municipalContactLookup(municipal_id);
@@ -241,7 +245,8 @@
     		shares: ["email", "twitter", "facebook", "linkedin"]
 		});
 		$("#shareRoundIcons").append('<a rel="license" target="_blank" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons Licence" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a></a>.');
-		$("#shareRoundIcons").append('<br /><a target="_blank" href="https://github.com/bjarman/cedmap" style="color: black; font-size: 16px;"><i class="fa fa-github"></i></a>');
+		$("#shareRoundIcons").append('<br /><a target="_blank" href="https://github.com/bjarman/cedmap" style="color: black; font-size: 25px;"><i class="fa fa-github"></i></a>');
+		$('window').preloader();
 	}
 });
 </script>
@@ -253,30 +258,90 @@
 		}
 		html, body {
 			height: 100%;
-      		width: 100%;
+      width: 100%;
 			margin: 0;
 			padding: 0;
 		}
 		body {
 			background-color: #FFFFFF;
 			background-image: url('https://showyourstripes.info/stripes/EUROPE-Sweden--1901-2018-BK.png');
-  			background-position: top;
-  			background-repeat: repeat-y;
-  			background-size: contain;
-  			margin: 0;
-  			padding: 0;
+  		background-position: top;
+  		background-repeat: repeat-y;
+  		background-size: contain;
+  		margin: 0;
+  		padding: 0;
 		}
 		#shareRoundIcons{
 			text-align: right;
 		}
 		.jssocials-share-link {
 			border-radius: 50%;
-			background-color: white;
+			background-color: black;
+			color: white !important;
 			font-size: 8px;
+		}
+
+		#preloader {
+		  position: fixed;
+		  top: 0;
+		  left: 0;
+		  width: 100%;
+		  height: 100%;
+		  z-index: 1000
+		}
+
+		#preloader #preloader-inner {
+		  display: block;
+		  position: relative;
+		  left: 50%;
+		  top: 50%;
+		  width: 150px;
+		  height: 150px;
+		  margin: -75px 0 0 -75px;
+		  border-radius: 50%;
+		  border: 3px solid transparent;
+		  border-top-color: #3498db;
+		  animation: spin 2s linear infinite
+		}
+
+		#preloader #preloader-inner:before {
+		  content: "";
+		  position: absolute;
+		  top: 5px;
+		  left: 5px;
+		  right: 5px;
+		  bottom: 5px;
+		  border-radius: 50%;
+		  border: 3px solid transparent;
+		  border-top-color: #e74c3c;
+		  animation: spin 3s linear infinite
+		}
+
+		#preloader #preloader-inner:after {
+		  content: "";
+		  position: absolute;
+		  top: 15px;
+		  left: 15px;
+		  right: 15px;
+		  bottom: 15px;
+		  border-radius: 50%;
+		  border: 3px solid transparent;
+		  border-top-color: #f9c922;
+		  animation: spin 1.5s linear infinite
+		}
+		@keyframes
+		spin { 0% {
+		transform:rotate(0deg)
+		}
+
+		to { transform: rotate(1turn) }
 		}
 	</style>
 </head>
 <body>
+	<div id="preloader">
+  	<div id="preloader-inner"></div>
+	</div>
 	<div id='map'></div>
 </body>
 </html>
