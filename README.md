@@ -1,5 +1,6 @@
 # cedmap
-![Parents for future](http://foraldravralet.se/parentsforfuture/wp-content/uploads/2019/03/p4f_logo_sev2_nobkg.png =200x200)
+<img src="http://foraldravralet.se/parentsforfuture/wp-content/uploads/2019/03/p4f_logo_sev2_nobkg.png" width="200">
+
 This is a very simple "hack" to visualize which municipalities in Sweden: 
 
  - Has declared climate emergency
