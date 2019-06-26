@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="sv" xml:lang="sv" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+	<title>GeoJSON tutorial - Leaflet</title>
+
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js" integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og==" crossorigin=""></script>
+		<script
+	  src="https://code.jquery.com/jquery-3.4.1.min.js"
+	  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+	  crossorigin="anonymous"></script>
+	<script src="jquery-google-sheet-to-json.min.js"></script>
+	<!--<script src="https://spreadsheets.google.com/feeds/cells/1DMrOOb_QxBDZgPzgFrh9GQSx1XR8I1y0ZFaXpItT__w/1/public/basic?alt=json-in-script&callback=sheet"></script>-->
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" rel="stylesheet" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script>
+	<style>
+		#map {
+			width: 100%;
+			height: 100%;
+			background: transparent;
+		}
+		html, body {
+			height: 100%;
+      width: 100%;
+			margin: 0;
+			padding: 0;
+		}
+		body {
+			background-color: #FFFFFF;
+			background-image: url('https://showyourstripes.info/stripes/EUROPE-Sweden--1901-2018-BK.png');
+  			background-position: top;
+  			background-repeat: repeat-y;
+  			background-size: contain;
+  			margin: 0;
+  			padding: 0;
+		}
+
+	</style>
+
+
+</head>
+<body>
+<!--<select id="municipal">
+	<option>Välj kommun</option>
+</select>-->
+<div id='map'></div>
+
+<script src="geojson.js" type="text/javascript"></script>
+
+<script>
+var entry;
+var entry_array = [];
+var municipal_array = [];
+var municipal_id;
+
+$(document).ready(function() {
+
+function prepareEmail(municipal_id){
+
+	var contact = municipalContactLookup(municipal_id);
+	//console.log(contact);
+	var formattedBody = "Hej! Vi vill att ni deklarerar klimatnödläge nu!";
+	//var a = document.createElement('a');
+	//var linkText = document.createTextNode("Skicka epost till kommunen!");
+	//a.appendChild(linkText);
+	//a.title = "Skicka epost till kommunen!";
+
+	var mailToLink = contact["email"];
+	var mailContent = "Subject=Deklarera klimatnödläge nu!&";
+	//mailContent += "cc=bob@spacecadets.co.uk&";
+	mailContent += "body=" + encodeURIComponent(formattedBody);
+
+	mailContent = mailToLink + mailContent;
+	//document.getElementById("ex").appendChild(a);
+	//console.log(a.href);
+	return mailContent;
+}
+
+/*
+	var map = L.map('map').setView([63.36444523158069, 17.613830566406254], 5);//geo:59.17,5.70?z=4
+
+	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+		maxZoom: 18,
+		attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+			'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+			'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+		id: 'mapbox.light'
+	}).addTo(map);
+
+*/
+
+/*function sheet(sheet){
+	console.log(sheet.feed.entry);
+}*/
+//AIzaSyAIDUBk738Y9GnP1am4BJOka8lg6TCJruM
+//var entry;
+
+var jqxhr = $.getJSON("https://spreadsheets.google.com/feeds/list/1DMrOOb_QxBDZgPzgFrh9GQSx1XR8I1y0ZFaXpItT__w/1/public/basic?alt=json", function(data) {
+  //console.log(data);
+	entry = data.feed.entry;
+
+
+	$(entry).each(function(){
+		municipal_id = this.title.$t;
+		var a = this.content.$t.split(",");
+		//console.log(a);
+		entry_array = a.map(function(item){
+			return item.split(": ").pop();
+		});
+		//console.log(entry_array);
+		var ma = {
+				"id": municipal_id,
+				"name": entry_array[0],
+				"population": entry_array[1],
+				"email": entry_array[2],
+				"www": entry_array[3],
+				"phone": entry_array[4],
+				"ced_status": entry_array[5]
+			};
+		//console.log(ma);
+		municipal_array.push(ma);
+	});
+	//console.log(municipal_array);
+})
+.done(function() {
+    console.log( "second success" );
+		//console.log(municipal_array);
+		console.log(ced_status(1275));
+		init();
+  })
+  .fail(function() {
+    console.log( "error" );
+  })
+  .always(function() {
+    console.log( "complete" );
+  });
+function ced_status(municipal_id){
+	//console.log(municipal_array);
+	var mid;
+	$(municipal_array).each(function(){
+		//console.log(this.id);
+		if(this.id == municipal_id){
+			mid = this.ced_status;
+		}
+	});
+	return mid;
+	/*for(var key in municipal_array){
+		console.log(key);
+		if(municipal_array["id"] == municipal_id){
+			return municipal_array["name"];
+		}
+	}*/
+}
+function municipalContactLookup(municipal_id){
+	var mid;
+	$(municipal_array).each(function(){
+		if(this.id == municipal_id){
+			that = this;
+		}
+	});
+	return that;
+}
+
+var s = [];
+
+var map = L.map('map', {minZoom: 5, maxZoom: 8}).setView([63.020557650316576, 18.092765808105472], 5);
+
+var ol = [];
+
+	function onEachFeature(feature, layer) {
+		console.log("onEachFeature");
+		L.stamp(layer);
+		
+		//Knapp för att öppna div med mail etc
+		
+
+		//feature.properties.ced = Math.round(Math.random());
+		feature.properties.ced = ced_status(feature.properties['ref:se:kommun:kod']);
+		console.log(feature.properties);
+		var c = feature.properties.ced == 1 ? 'har' : 'har inte';
+		var municipal_info = municipalContactLookup(feature.properties['ref:se:kommun:kod']);
+		//console.log(municipal_info);
+		var popupContent = "<p><strong>" + feature.properties['name'] + " " + c + " deklarerat klimatnödläge.</strong></p>";
+		popupContent += "<p>Sätt press på " + feature.properties['name'] + " genom att skicka ett mail där du kräver att kommunen utlyser klimatnödläge!</p>";
+		popupContent += "<a href='mailto:" + prepareEmail(feature.properties['ref:se:kommun:kod']) + "'>Klicka här för att öppna ett färdigt mail.</a></p>";
+		//console.log(prepareEmail(feature.properties['ref:se:kommun:kod']));
+		//popupContent += Object.keys(municipal_info).map(function(key, index){
+		//	console.log(municipal_info[key]);
+		//	return key + ": " + municipal_info[key] + "<br />";
+		//});
+		//popupContent += municipal_info["email"];
+
+		console.log("ced = " + feature.properties.ced);
+		console.log(feature.properties.ced == 1 ? "#FFCC00" : "#CCFFFF");
+		var fillColor = feature.properties.ced == 1 ? {fillColor: '#1CA549'} : {fillColor: '#F2F2F2'};
+		//console.log(fillColor);
+
+		layer.setStyle(fillColor);
+
+		/*if(feature.properties.ced == 1){
+			layer.setStyle({fillColor: '#FFCC00'});
+		}
+		else {
+			layer.setStyle({fillColor: '#CCFFFF'});
+		}*/
+
+		if (feature.properties && feature.properties.popupContent) {
+			popupContent += feature.properties.popupContent;
+		}
+
+		layer.bindPopup(popupContent);
+
+		layer.on('popupopen', function(e){
+			console.log(e.target._leaflet_id);
+			$('#municipal').val(e.target._leaflet_id); // Select the option with a value of '1'
+			$('#municipal').trigger('change'); // Notify any JS components that the value changed
+		});
+
+		s.push({[feature.properties["ref:se:kommun:kod"]]:{
+			layer: layer,
+        	name: feature.properties.name,
+			short_name: feature.properties.short_name,
+			ced: feature.properties.ced,
+			code: feature.properties["ref:se:kommun:kod"]
+       	}});
+
+		ol.push({
+			municipal: feature.properties['name'],
+			id: layer._leaflet_id
+		});
+		legend.update(feature.properties['name'], layer._leaflet_id);
+	}
+
+	var legend = L.control({position: 'topright'});
+	 legend.onAdd = function (map, ol) {
+	 //console.log("legend.onAdd");
+	    var div = L.DomUtil.create('div', 'info legend');
+	    var dropDownContent ='<select id="municipal"><option>Välj kommun</option></select>';
+		//console.log(ol);
+		//this.update();
+		//console.log(dropDownContent);
+
+	    div.innerHTML = dropDownContent;
+	    div.firstChild.onmousedown = div.firstChild.ondblclick = L.DomEvent.stopPropagation;
+	    return div;
+	};
+
+	legend.update = function(key, value){
+		//console.log(L.DomUtil.get(this._container.firstChild));
+		L.DomUtil.get(this._container.firstChild).add(
+			new Option(key, value)
+		);
+
+		//for (var i = 0; i < ol.length; i++ ){
+        	//dropDownContent += '<option value=' + "'" + uniqueCountryArray[i]["ISO3"] + "'>" + uniqueCountryArray[i]["Country"] + '</option>';
+       // 	console.log(ol[i].municipal);
+       	//}
+	}
+	legend.addTo(map);
+
+	L.control.scale().addTo(map);
+
+	map.on('layeradd', function(e) {
+    	//console.log(e);
+    	// do something related to the layer that was added
+	})
+
+	map.on('moveend', function(e){
+		//console.log(e);
+	});
+
+	map.on('popupopen', function(e){
+		console.log(e.layer);
+	});
+
+	var myStyle = {
+    	"color": "#666666",
+    	"weight": 1,
+    	"opacity": 1.0,
+    	"fillOpacity": 1.0
+	};
+
+	function randomBackgroundColor(){
+		return Math.round(Math.random()) ? "red" : "green";
+	}
+function init(){
+	console.log("init...");
+	L.geoJSON(gjson, {
+		style: myStyle,
+		filter: function (feature, layer) {
+			if (feature.properties) {
+				// If the property "underConstruction" exists and is true, return false (don't render features under construction)
+				return feature.properties.underConstruction !== undefined ? !feature.properties.underConstruction : true;
+			}
+			return false;
+		},
+
+		onEachFeature: onEachFeature
+	}).addTo(map);
+
+
+	$('#municipal').select2();
+
+	$('#municipal').on('select2:select', function (e) {
+		var data = e.params.data;
+		//console.log(e);
+		map._layers[data.id].openPopup();
+	map.fitBounds(map._layers[data.id].getBounds());
+	});
+
+	municipal = document.getElementById("municipal");
+	municipal.addEventListener("change", function(){
+	//console.log(map._layers[municipal.value].getBounds());
+	map._layers[municipal.value].openPopup();
+	map.fitBounds(map._layers[municipal.value].getBounds());
+	});
+
+}
+
+
+
+/*
+if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(position){
+      var latitude = position.coords.latitude;
+      var longitude = position.coords.longitude;
+      });
+
+      map.locate({setView: true, maxZoom: 16});
+      function onLocationFound(e) {
+      console.log(e);
+        var radius = e.accuracy / 2;
+        console.log(e.latlng);
+        L.marker(e.latlng).addTo(map)
+            .bindPopup("You are within " + radius + " meters from this point").openPopup();
+        L.circle(e.latlng, radius).addTo(map);
+
+      }
+      map.on('locationfound', onLocationFound);
+  }else {
+      alert("Geolocation API is not supported in your browser. :(");
+  }
+*/
+
+
+});
+</script>
+
+
+
+</body>
+</html>
