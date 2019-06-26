@@ -14,6 +14,21 @@
 	<script type="text/javascript">
 		!function(e){e.fn.preloader=function(t){function r(){c=e(i.selector)}function n(){switch(i.type){case"document":default:setTimeout(function(){o()},i.delay)}}function o(){switch(i.removeType){case"fade":a();break;case"remove":default:u()}}function u(){return c.remove()}function a(){return c.fadeOut(i.fadeDuration,f())}function f(){return function(){c.remove()}}var i=e.extend({selector:"#preloader",type:"document",removeType:"fade",fadeDuration:750,delay:0},t),c=null;return r(),this.ready(function(){e(this).trigger("preloader:before"),n(),e(this).trigger("preloader:after")})}}(jQuery);
 	</script>
+	<script id="mailbody">
+Vår gemensamma livsmiljö är hotad! Vi vädjar till kommunens folkvalda att agera kraftfullt och utlysa nödläge för klimatet i vår kommun.
+Idag står världen inför ett globalt klimathot som kommer att drabba även oss här i kommunen. Politiska ledare i Sverige och världen tycks leva i förnekelse inför hur konsekvenserna av våra Co2 utsläpp kommer att drabba oss, våra barn och kommande generationer med full kraft. Många kommuner och lokala myndigheter kan nu spela en avgörande roll när det gäller att genomföra de förändringar som krävs för att hejda en katastrof.
+På flera ställen runt om i världen har man på det lokala planet utlyst nödläge för klimatet. I städer som Vancouver, Basel, och Oxford har man gått före och visat vägen. Nyligen utlyste även Storbritannien, som första land, klimatnödläge.
+Efter att ha tagit del av kommunens handlingsplan med åtgärder för klimat och energiarbetet har vi insett att de åtgärder som hittills tagits i kommunen när det gäller att säkerställa en hållbar utveckling och Co2-neutral livsstil är vällovliga men tyvärr helt otillräckliga.
+Vi har därför beslutat att vända oss till våra folkvalda politiker med en akut vädjan.
+Vi anser att kommunen, för att möta den akuta klimatkrisen, måste mobilisera alla tänkbara resurser. Det kommer att krävas genomgripande förändringar och en aktiv agenda som i allt sätter vår gemensamma framtid i världen och i kommunen överst. Om vi ska ha minsta chans att lyckas med vår omställning måste alla politiska beslut tas mot bakgrund av den akuta klimatkrisen.
+Vi anser att kommunens politiker nu behöver:
+1. Erkänna att vi befinner oss i ett klimatnödläge.
+2. Ge kommunen i uppdrag att skyndsamt ta fram en klimatnödlägesplan och prioritera planen i kommunens strategiska arbete.
+3. Fastställa att kommunen i klimat-nödlägesplanen tar på sig att informera alla kommunens invånare om nödläget och samverka med lokala aktörer för en skyndsam omställning. Kommunen bör även löpande informera invånarna om vilka åtgärder som vidtagits.
+4. Erkänna att nödläget varar tills världens nationer säkerställt att målet att den globala uppvärmningen inte passerar ödesdigra 1,5 grader, i enlighet med Parisavtalet.
+5. Fastställa att kommunen enligt klimatnödlägesplanen prioriterar att samarbeta med andra kommuner internationellt och nationellt för att bygga upp kompetens och ta kompensatoriskt ansvar för en snabb omställning tills högre politiker tar sitt fulla ansvar för omställningen till en hållbar framtid.
+Om vi ska kunna se kommande generationer i ögonen är det dags att agera nu. Vi vill som aktiva och ansvarstagande medborgare stå bakom våra politiker i den omställning som kommer att krävas.
+	</script>
 	<script type="text/javascript" src="//cdn.jsdelivr.net/jquery.jssocials/1.4.0/jssocials.min.js"></script>
 	<link type="text/css" rel="stylesheet" href="//stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
 	<link type="text/css" rel="stylesheet" href="//cdn.jsdelivr.net/jquery.jssocials/1.4.0/jssocials.css" />
@@ -35,9 +50,9 @@
 
 			function prepareEmail(municipal_id){
 				var contact = municipalContactLookup(municipal_id);
-				var formattedBody = encodeURIComponent("Hej! Jag vill att ni deklarerar klimatnödläge nu!");
+				var formattedBody = encodeURIComponent($('#mailbody').html());
 				var mailToLink = contact["email"];
-				var mailContent = "Subject=Deklarera klimatnödläge nu!&";
+				var mailContent = "Subject=Utlys klimatnödläge nu!&";
 				mailContent += "body=" + formattedBody;
 				mailContent = mailToLink + "?" + mailContent;
 				return mailContent;
