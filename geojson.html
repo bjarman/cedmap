@@ -133,7 +133,9 @@
 				popupContent += "<p>Sätt press på " + feature.properties['name'] + " genom att skicka ett mail där du kräver att kommunen utlyser klimatnödläge!</p>";
 				popupContent += "<a href='mailto:" + prepareEmail(feature.properties['ref:se:kommun:kod']) + "'>Klicka här för att öppna ett färdigt mail.</a></p>";
 			}
-
+			var ced_status_colors = [
+				""
+			]
 			var fillColor = feature.properties.ced == 1 ? {fillColor: '#1CA549'} : feature.properties.discussion_status == 1 ? {fillColor: '#FFCC00'} : {fillColor: '#F2F2F2'};
 
 			layer.setStyle(fillColor);
