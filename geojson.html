@@ -9,11 +9,23 @@
   	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!--<link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />-->
     <link rel="stylesheet" href="//unpkg.com/leaflet@1.5.1/dist/leaflet.css"/>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <script type="text/javascript" src="//unpkg.com/leaflet@1.5.1/dist/leaflet.js"></script>
-	<script type="text/javascript" src="//code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-	<script type="text/javascript">
-		!function(e){e.fn.preloader=function(t){function r(){c=e(i.selector)}function n(){switch(i.type){case"document":default:setTimeout(function(){o()},i.delay)}}function o(){switch(i.removeType){case"fade":a();break;case"remove":default:u()}}function u(){return c.remove()}function a(){return c.fadeOut(i.fadeDuration,f())}function f(){return function(){c.remove()}}var i=e.extend({selector:"#preloader",type:"document",removeType:"fade",fadeDuration:750,delay:0},t),c=null;return r(),this.ready(function(){e(this).trigger("preloader:before"),n(),e(this).trigger("preloader:after")})}}(jQuery);
-	</script>
+		<script type="text/javascript" src="//code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.1/dist/jquery.validate.min.js"></script>
+		<script type="text/javascript">
+			!function(e){e.fn.preloader=function(t){function r(){c=e(i.selector)}function n(){switch(i.type){case"document":default:setTimeout(function(){o()},i.delay)}}function o(){switch(i.removeType){case"fade":a();break;case"remove":default:u()}}function u(){return c.remove()}function a(){return c.fadeOut(i.fadeDuration,f())}function f(){return function(){c.remove()}}var i=e.extend({selector:"#preloader",type:"document",removeType:"fade",fadeDuration:750,delay:0},t),c=null;return r(),this.ready(function(){e(this).trigger("preloader:before"),n(),e(this).trigger("preloader:after")})}}(jQuery);
+
+			/**
+		 * jQuery serializeObject
+		 * @copyright 2014, macek <paulmacek@gmail.com>
+		 * @link https://github.com/macek/jquery-serialize-object
+		 * @license BSD
+		 * @version 2.5.0
+		 */
+		!function(e,i){if("function"==typeof define&&define.amd)define(["exports","jquery"],function(e,r){return i(e,r)});else if("undefined"!=typeof exports){var r=require("jquery");i(exports,r)}else i(e,e.jQuery||e.Zepto||e.ender||e.$)}(this,function(e,i){function r(e,r){function n(e,i,r){return e[i]=r,e}function a(e,i){for(var r,a=e.match(t.key);void 0!==(r=a.pop());)if(t.push.test(r)){var u=s(e.replace(/\[\]$/,""));i=n([],u,i)}else t.fixed.test(r)?i=n([],r,i):t.named.test(r)&&(i=n({},r,i));return i}function s(e){return void 0===h[e]&&(h[e]=0),h[e]++}function u(e){switch(i('[name="'+e.name+'"]',r).attr("type")){case"checkbox":return"on"===e.value?!0:e.value;default:return e.value}}function f(i){if(!t.validate.test(i.name))return this;var r=a(i.name,u(i));return l=e.extend(!0,l,r),this}function d(i){if(!e.isArray(i))throw new Error("formSerializer.addPairs expects an Array");for(var r=0,t=i.length;t>r;r++)this.addPair(i[r]);return this}function o(){return l}function c(){return JSON.stringify(o())}var l={},h={};this.addPair=f,this.addPairs=d,this.serialize=o,this.serializeJSON=c}var t={validate:/^[a-z_][a-z0-9_]*(?:\[(?:\d*|[a-z0-9_]+)\])*$/i,key:/[a-z0-9_]+|(?=\[\])/gi,push:/^$/,fixed:/^\d+$/,named:/^[a-z0-9_]+$/i};return r.patterns=t,r.serializeObject=function(){return new r(i,this).addPairs(this.serializeArray()).serialize()},r.serializeJSON=function(){return new r(i,this).addPairs(this.serializeArray()).serializeJSON()},"undefined"!=typeof i.fn&&(i.fn.serializeObject=r.serializeObject,i.fn.serializeJSON=r.serializeJSON),e.FormSerializer=r,r});
+		</script>
 	<script id="mailbody">
 Vår gemensamma livsmiljö är hotad! Vi vädjar till kommunens folkvalda att agera kraftfullt och utlysa nödläge för klimatet i vår kommun.
 Idag står världen inför ett globalt klimathot som kommer att drabba även oss här i kommunen. Politiska ledare i Sverige och världen tycks leva i förnekelse inför hur konsekvenserna av våra Co2 utsläpp kommer att drabba oss, våra barn och kommande generationer med full kraft. Många kommuner och lokala myndigheter kan nu spela en avgörande roll när det gäller att genomföra de förändringar som krävs för att hejda en katastrof.
@@ -148,11 +160,27 @@ Om vi ska kunna se kommande generationer i ögonen är det dags att agera nu. Vi
 				popupContent += "<p>Sätt press på " + feature.properties['name'] + " genom att skicka ett mail där du kräver att kommunen utlyser klimatnödläge!</p>";
 				popupContent += "<a href='mailto:" + prepareEmail(feature.properties['ref:se:kommun:kod']) + "'>Klicka här för att öppna ett färdigt mail.</a></p>";
 			}
-			var ced_status_colors = [
-				""
-			]
-			var fillColor = feature.properties.ced == 1 ? {fillColor: '#1CA549'} : feature.properties.discussion_status == 1 ? {fillColor: '#FFCC00'} : {fillColor: '#F2F2F2'};
 
+			var fillColor;
+			
+			if(feature.properties.discussion_status == 1 && feature.properties.ced != 2){
+				fillColor = {fillColor: '#FFCC00'};
+			} else {
+				switch(true) {
+					case (feature.properties.ced == 0):
+						fillColor = {fillColor: '#F2F2F2'};
+						break;
+					case (feature.properties.ced == 1):
+						fillColor = {fillColor: '#1CA549'};
+						break;
+					case (feature.properties.ced == 2):
+						fillColor = {fillColor: '#FF3300'};
+						break;
+					default:
+						fillColor = {fillColor: '#F2F2F2'};
+				}
+			}
+			
 			layer.setStyle(fillColor);
 
 			if (feature.properties && feature.properties.popupContent) {
@@ -184,7 +212,7 @@ Om vi ska kunna se kommande generationer i ögonen är det dags att agera nu. Vi
 		var legend = L.control({position: 'topright'});
 	 	legend.onAdd = function (map, ol) {
 	    	var div = L.DomUtil.create('div', 'info legend');
-	    	var dropDownContent ='<select id="municipal"><option>Välj kommun</option></select>';
+	    	var dropDownContent ='<select id="municipal" class="select2"><option>Välj kommun</option></select>';
 	    	div.innerHTML = dropDownContent;
 	    	div.firstChild.onmousedown = div.firstChild.ondblclick = L.DomEvent.stopPropagation;
 	    	return div;
@@ -241,7 +269,6 @@ Om vi ska kunna se kommande generationer i ögonen är det dags att agera nu. Vi
 				},
 				onEachFeature: onEachFeature
 			}).addTo(map);
-
 			$('#municipal').select2();
 
 			$('#municipal').on('select2:select', function (e) {
@@ -254,6 +281,7 @@ Om vi ska kunna se kommande generationer i ögonen är det dags att agera nu. Vi
 			municipal.addEventListener("change", function(){
 			map._layers[municipal.value].openPopup();
 			map.fitBounds(map._layers[municipal.value].getBounds());
+
 		});
 
 		$("#shareRoundIcons").jsSocials({
@@ -263,8 +291,55 @@ Om vi ska kunna se kommande generationer i ögonen är det dags att agera nu. Vi
 		});
 		$("#shareRoundIcons").append('<a rel="license" target="_blank" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons Licence" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a></a>.');
 		$("#shareRoundIcons").append('<br /><a target="_blank" href="https://github.com/bjarman/cedmap" style="color: black; font-size: 25px;"><i class="fa fa-github"></i></a>');
+		$("#shareRoundIcons").prepend('<button id="ced-form-open" type="submit" class="btn btn-success">Hjälp oss samla in data!</button>');
+		var $code_options = $("#municipal > option").clone();
+		$("#code").append($code_options);
+		$('#code').select2({
+			width: '100%',
+			dropdownParent: $("#ced-form")
+		});
+		$("#ced-form-open").click(function(){
+			$("#ced-form-container").show();
+		});
 		$('window').preloader();
 	}
+
+
+	var $form = $('form#ced-form'),
+	url = 'https://script.google.com/macros/s/AKfycby8dZdaPtf14KneWGuKDVynxGD8QlE0CqxnNrcTFUYDWoSgHWA/exec';
+	$form.submit(function(e){
+		e.preventDefault();
+		$(".h").empty();
+		if($("#code option:selected").val() == "Välj kommun"){
+			$("#code_help").html("<p style='color: red;'>Du måste välja en kommun.</p>");
+		}
+		if (!$("input:radio[name='ced_status']").is(":checked")) {
+   			$("#ced_status_help").html("<p style='color: red;'>Du måste välja ett alternativ.</p>");
+		}
+		else {
+		var jqxhr = $.ajax({
+			url: url,
+			method: "GET",
+			dataType: "json",
+			//data: $(form).find("select, input, textarea").serializeJSON()
+			data: $form.serializeObject()
+		}).fail(function() {
+			//console.log( "error" );
+		}).done(function() {
+			//console.log("Done?");
+			//$(".thanks").html("Thank you for getting in touch!").css("font-size","4rem");
+			$("#ced-form").remove();
+			$("#ced-form-open").remove();
+			$("#ced-form-container").html("<p>Tack för att du hälper till med datainsamlingen!</p>").fadeOut(5000, function(){
+				$("#ced-form-container").hide();
+			});
+		});
+		}
+	});
+	$("#abort").click(function(){
+		$("#ced-form-container").hide();
+	});
+
 });
 </script>
 	<style>
@@ -353,6 +428,17 @@ Om vi ska kunna se kommande generationer i ögonen är det dags att agera nu. Vi
 
 		to { transform: rotate(1turn) }
 		}
+		#ced-form-container{
+			position: absolute;
+			z-index: 1111;
+			padding: 20px;
+			top: 20px;
+			left: 10%;
+			width: 80%;
+			float: left;
+			background: rgba(255, 255, 255, .8);
+			display: none;
+		}
 	</style>
 </head>
 <body>
@@ -360,5 +446,91 @@ Om vi ska kunna se kommande generationer i ögonen är det dags att agera nu. Vi
   	<div id="preloader-inner"></div>
 	</div>
 	<div id='map'></div>
+	<div id="ced-form-container">
+	<form id="ced-form">
+	  <div class="form-group row">
+	    <label for="code" class="col-4 col-form-label">Välj kommun</label>
+	    <div class="col-8">
+	      	<select name="code" id="code" data-select2-id="code" tabindex="-1" class="custom-select"></select>
+	      	<span id="code_help" class="form-text text-muted h"></span>
+	    </div>
+	  </div>
+	  <div class="form-group row">
+	    <label class="col-4 col-form-label">Beslut om att utlysa klimatnödläge</label>
+	    <div class="col-8">
+	      <div class="custom-controls-stacked">
+	        <div class="custom-control custom-checkbox">
+	          <input name="ced_status" id="ced_status_0" type="radio" class="custom-control-input" value="0">
+	          <label for="ced_status_0" class="custom-control-label">Beslut att utlysa klimatnödläge är inte fattat</label>
+	        </div>
+	      </div>
+	      <div class="custom-controls-stacked">
+	        <div class="custom-control custom-checkbox">
+	          <input name="ced_status" id="ced_status_1" type="radio" class="custom-control-input" value="1">
+	          <label for="ced_status_1" class="custom-control-label">Beslut att utlysa klimatnödläge är fattat</label>
+	        </div>
+	      </div>
+	      <div class="custom-controls-stacked">
+	        <div class="custom-control custom-checkbox">
+	          <input name="ced_status" id="ced_status_2" type="radio" class="custom-control-input" value="2">
+	          <label for="ced_status_2" class="custom-control-label">Beslut att inte utlysa klimatnödläge är fattat</label>
+	        </div>
+	      </div>
+	      <span id="ced_status_help" class="form-text text-muted h"></span>
+	    </div>
+	  </div>
+	  <div class="form-group row">
+	    <label for="citizen_proposal" class="col-4 col-form-label">Klistra in länk till beslut/förslag om det finns</label>
+	    <div class="col-8">
+	      <div class="input-group">
+	        <div class="input-group-prepend">
+	          <div class="input-group-text">
+	            <i class="fa fa-link"></i>
+	          </div>
+	        </div>
+	        <input id="citizen_proposal" name="citizen_proposal" type="text" class="form-control">
+	      </div>
+	    </div>
+	  </div>
+	  <div class="form-group row">
+	    <label class="col-4">Diskussion/process inför beslut</label>
+	    <div class="col-8">
+	      <div class="custom-control custom-checkbox custom-control-inline">
+	        <input name="discussion_status" id="discussion_status_0" type="radio" class="custom-control-input" value="0">
+	        <label for="discussion_status_0" class="custom-control-label">Ingen diskussion eller process är påbörjad</label>
+	      </div>
+	      <div class="custom-control custom-checkbox custom-control-inline">
+	        <input name="discussion_status" id="discussion_status_1" type="radio" class="custom-control-input" value="1">
+	        <label for="discussion_status_1" class="custom-control-label">Diskussion eller process är påbörjad</label>
+	      </div>
+	    </div>
+	  </div>
+	  <div class="form-group row">
+	    <label for="citizen_proposal_ref" class="col-4 col-form-label">Klistra in länk till diskussion/process om det finns</label>
+	    <div class="col-8">
+	      <div class="input-group">
+	        <div class="input-group-prepend">
+	          <div class="input-group-text">
+	            <i class="fa fa-link"></i>
+	          </div>
+	        </div>
+	        <input id="citizen_proposal_ref" name="citizen_proposal_ref" type="text" class="form-control">
+	      </div>
+	    </div>
+	  </div>
+	  <div class="form-group row">
+	    <label for="comment" class="col-4 col-form-label">Kommentar</label>
+	    <div class="col-8">
+	      <textarea id="comment" name="comment" cols="40" rows="5" class="form-control"></textarea>
+	    </div>
+	  </div>
+	  <div class="form-group row">
+	    <div class="offset-4 col-8">
+	    	<button name="abort" type="button" class="btn btn-warning" id="abort">Avbryt</button>
+	    	<button name="submit" type="submit" class="btn btn-primary">Skicka</button>
+	    </div>
+	  </div>
+	</form>
+	</div>
 </body>
 </html>
