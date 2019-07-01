@@ -319,11 +319,19 @@
 		
 		$("#shareRoundIcons").append('<button type="submit" class="ced-form-open btn btn-sm btn-success">Hjälp oss samla in data!</button>');
 		$("#ccoders-logo").attr("src", $("#ccoders-logo-svg").html());
-		var $code_options = $("#municipal > option").clone();
-		$("#code").append($code_options);
+		//var $code_options = $("#municipal > option").clone();
+
+		$.each(municipal_code_array, function(key, value) {
+			$('#code')
+				.append($('<option>', { value : value.code })
+				.text(value.municipal));
+			});
 		$('#code').select2({
 			width: '100%',
 			dropdownParent: $("#ced-form")
+		});
+		$('#code').change(function(){
+			$('#name').val($("#code option:selected").text());
 		});
 		$(".ced-form-open").click(function(){
 			console.log("click");
@@ -479,8 +487,9 @@
 	  <div class="form-group row">
 	    <label for="code" class="col-4 col-form-label">Välj kommun</label>
 	    <div class="col-8">
-	      	<select name="code" id="code" data-select2-id="code" tabindex="-1" class="custom-select"></select>
+	      	<select name="code" id="code" data-select2-id="code" tabindex="-1" class="custom-select"><option>Välj kommun</option></select>
 	      	<span id="code_help" class="form-text text-muted h"></span>
+	      	<input type="hidden" name="name" id="name" value=""/>
 	    </div>
 	  </div>
 	  <div class="form-group row">
