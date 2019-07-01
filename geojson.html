@@ -40,6 +40,7 @@
 		var entry_array = [];
 		var municipal_array = [];
 		var municipal_id;
+		var municipal_code_array = [];
 
 		$(document).ready(function() {
 			$('window').preloader();
@@ -220,6 +221,11 @@
 				municipal: feature.properties['name'],
 				id: layer._leaflet_id
 			});
+			municipal_code_array.push({
+				municipal: feature.properties['name'],
+				code: feature.properties["ref:se:kommun:kod"]
+			});
+			
 			legend.update(feature.properties['name'], layer._leaflet_id);
 		}
 
