@@ -25,7 +25,7 @@ Appart from these dependencies this is a very basic implementation, quick & dirt
 The Google sheet holding the Climate Emergency Declaration status of Swedish municipalities is curated by crowd sourcing, i.e. we who are active in Parents For Future Sweden all search and investigate each municipality from time to time to update the sheet with new information. 
 
 User Experience
-The cedmap has the ability to show the map with a default color. Each municipality is shown either in the map default color, if we have no information on Climate Emergency Declaraion status, or in yellow if status is "ongoing process" or in green if the municipality in fact has declared Climate Emergency.
+The cedmap has the ability to show the map with a default color. Each municipality is shown either in the map default color, if we have no information on Climate Emergency Declaraion status, or in yellow if status is "ongoing process" or in green if the municipality in fact has declared Climate Emergency or red if the municipality acively has decided against CED.
 
 This "application" is released under the most generous Creative Commons licence. 
 
