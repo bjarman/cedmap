@@ -24,21 +24,6 @@
 		 * @version 2.5.0
 		 */
 		!function(e,i){if("function"==typeof define&&define.amd)define(["exports","jquery"],function(e,r){return i(e,r)});else if("undefined"!=typeof exports){var r=require("jquery");i(exports,r)}else i(e,e.jQuery||e.Zepto||e.ender||e.$)}(this,function(e,i){function r(e,r){function n(e,i,r){return e[i]=r,e}function a(e,i){for(var r,a=e.match(t.key);void 0!==(r=a.pop());)if(t.push.test(r)){var u=s(e.replace(/\[\]$/,""));i=n([],u,i)}else t.fixed.test(r)?i=n([],r,i):t.named.test(r)&&(i=n({},r,i));return i}function s(e){return void 0===h[e]&&(h[e]=0),h[e]++}function u(e){switch(i('[name="'+e.name+'"]',r).attr("type")){case"checkbox":return"on"===e.value?!0:e.value;default:return e.value}}function f(i){if(!t.validate.test(i.name))return this;var r=a(i.name,u(i));return l=e.extend(!0,l,r),this}function d(i){if(!e.isArray(i))throw new Error("formSerializer.addPairs expects an Array");for(var r=0,t=i.length;t>r;r++)this.addPair(i[r]);return this}function o(){return l}function c(){return JSON.stringify(o())}var l={},h={};this.addPair=f,this.addPairs=d,this.serialize=o,this.serializeJSON=c}var t={validate:/^[a-z_][a-z0-9_]*(?:\[(?:\d*|[a-z0-9_]+)\])*$/i,key:/[a-z0-9_]+|(?=\[\])/gi,push:/^$/,fixed:/^\d+$/,named:/^[a-z0-9_]+$/i};return r.patterns=t,r.serializeObject=function(){return new r(i,this).addPairs(this.serializeArray()).serialize()},r.serializeJSON=function(){return new r(i,this).addPairs(this.serializeArray()).serializeJSON()},"undefined"!=typeof i.fn&&(i.fn.serializeObject=r.serializeObject,i.fn.serializeJSON=r.serializeJSON),e.FormSerializer=r,r});
-		</script>
-	<script id="mailbody">
-Vår gemensamma livsmiljö är hotad! Vi vädjar till kommunens folkvalda att agera kraftfullt och utlysa nödläge för klimatet i vår kommun.
-Idag står världen inför ett globalt klimathot som kommer att drabba även oss här i kommunen. Politiska ledare i Sverige och världen tycks leva i förnekelse inför hur konsekvenserna av våra Co2 utsläpp kommer att drabba oss, våra barn och kommande generationer med full kraft. Många kommuner och lokala myndigheter kan nu spela en avgörande roll när det gäller att genomföra de förändringar som krävs för att hejda en katastrof.
-På flera ställen runt om i världen har man på det lokala planet utlyst nödläge för klimatet. I städer som Vancouver, Basel, och Oxford har man gått före och visat vägen. Nyligen utlyste även Storbritannien, som första land, klimatnödläge.
-Efter att ha tagit del av kommunens handlingsplan med åtgärder för klimat och energiarbetet har vi insett att de åtgärder som hittills tagits i kommunen när det gäller att säkerställa en hållbar utveckling och Co2-neutral livsstil är vällovliga men tyvärr helt otillräckliga.
-Vi har därför beslutat att vända oss till våra folkvalda politiker med en akut vädjan.
-Vi anser att kommunen, för att möta den akuta klimatkrisen, måste mobilisera alla tänkbara resurser. Det kommer att krävas genomgripande förändringar och en aktiv agenda som i allt sätter vår gemensamma framtid i världen och i kommunen överst. Om vi ska ha minsta chans att lyckas med vår omställning måste alla politiska beslut tas mot bakgrund av den akuta klimatkrisen.
-Vi anser att kommunens politiker nu behöver:
-1. Erkänna att vi befinner oss i ett klimatnödläge.
-2. Ge kommunen i uppdrag att skyndsamt ta fram en klimatnödlägesplan och prioritera planen i kommunens strategiska arbete.
-3. Fastställa att kommunen i klimat-nödlägesplanen tar på sig att informera alla kommunens invånare om nödläget och samverka med lokala aktörer för en skyndsam omställning. Kommunen bör även löpande informera invånarna om vilka åtgärder som vidtagits.
-4. Erkänna att nödläget varar tills världens nationer säkerställt att målet att den globala uppvärmningen inte passerar ödesdigra 1,5 grader, i enlighet med Parisavtalet.
-5. Fastställa att kommunen enligt klimatnödlägesplanen prioriterar att samarbeta med andra kommuner internationellt och nationellt för att bygga upp kompetens och ta kompensatoriskt ansvar för en snabb omställning tills högre politiker tar sitt fulla ansvar för omställningen till en hållbar framtid.
-Om vi ska kunna se kommande generationer i ögonen är det dags att agera nu. Vi vill som aktiva och ansvarstagande medborgare stå bakom våra politiker i den omställning som kommer att krävas.
 	</script>
 	<script type="text/javascript" src="//cdn.jsdelivr.net/jquery.jssocials/1.4.0/jssocials.min.js"></script>
 	<link type="text/css" rel="stylesheet" href="//stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
@@ -59,12 +44,41 @@ Om vi ska kunna se kommande generationer i ögonen är det dags att agera nu. Vi
 		$(document).ready(function() {
 			$('window').preloader();
 
-			function prepareEmail(municipal_id){
+			function prepareEmail(municipal_id, mail_id, proposal){
 				var contact = municipalContactLookup(municipal_id);
-				var formattedBody = encodeURIComponent($('#mailbody').html());
+				//var formattedBody = encodeURIComponent($('#mailbody_' + mail_id).html());
 				var mailToLink = contact["email"];
+				var mailBody = "";
+
+				if(mail_id == 1){
+					mailBody += contact.name + " behöver utlysa klimatnödläge!\r\n";
+					mailBody += "Vår gemensamma livsmiljö är hotad! Vi vädjar till folkvalda i " + contact["name"] + " att agera kraftfullt och utlysa nödläge för klimatet i vår kommun.\r\n";
+					mailBody += "På flera ställen runt om i världen har man på det lokala planet utlyst nödläge för klimatet. I städer som Vancouver, Basel, och Oxford har man gått före och visat vägen. Nyligen utlyste även Storbritannien, som första land, klimatnödläge.\r\n";
+					mailBody += "Efter att ha tagit del av kommunens handlingsplan med åtgärder för klimat och energiarbetet har vi insett att de åtgärder som hittills tagits i kommunen när det gäller att säkerställa en hållbar utveckling och Co2-neutral livsstil är vällovliga men tyvärr helt otillräckliga.\r\n";
+					mailBody += "Vi har därför beslutat att vända oss till våra folkvalda politiker med en akut vädjan.\r\n";
+					mailBody += "Vi anser att kommunen, för att möta den akuta klimatkrisen, måste mobilisera alla tänkbara resurser. Det kommer att krävas genomgripande förändringar och en aktiv agenda som i allt sätter vår gemensamma framtid i världen och i kommunen överst. Om vi ska ha minsta chans att lyckas med vår omställning måste alla politiska beslut tas mot bakgrund av den akuta klimatkrisen.\r\n\r\n";
+					mailBody += "Vi anser att kommunens politiker nu behöver:\r\n";
+					mailBody += "1. Erkänna att vi befinner oss i ett klimatnödläge.\r\n";
+					mailBody += "2. Ge kommunen i uppdrag att skyndsamt ta fram en klimatnödlägesplan och prioritera planen i kommunens strategiska arbete.\r\n";
+					mailBody += "3. Fastställa att kommunen i klimat-nödlägesplanen tar på sig att informera alla kommunens invånare om nödläget och samverka med lokala aktörer för en skyndsam omställning. Kommunen bör även löpande informera invånarna om vilka åtgärder som vidtagits.\r\n";
+					mailBody += "4. Erkänna att nödläget varar tills världens nationer säkerställt att målet att den globala uppvärmningen inte passerar ödesdigra 1,5 grader, i enlighet med Parisavtalet.\r\n";
+					mailBody += "5. Fastställa att kommunen enligt klimatnödlägesplanen prioriterar att samarbeta med andra kommuner internationellt och nationellt för att bygga upp kompetens och ta kompensatoriskt ansvar för en snabb omställning tills högre politiker tar sitt fulla ansvar för omställningen till en hållbar framtid. Om vi ska kunna se kommande generationer i ögonen är det dags att agera nu. Vi vill som aktiva och ansvarstagande medborgare stå bakom våra politiker i den omställning som kommer att krävas.\r\n";
+				}
+				
+				if(mail_id == 2){
+					mailBody += contact["name"] + " behöver utlysa klimatnödläge!\r\n";
+					mailBody += "Jag är starkt oroade över att inte tillräckliga åtgärder vidtas för att bryta den snabba utvecklingen mot klimatkatastrof, utarmningen av jorden och utrotning av djur och växter. I Parisavtalet 2015 beslutade världens nationer att temperaturökningen bör begränsas till max 1,5 grader. Utifrån de åtgärder som hittills utlovats globalt tyder dock ingenting på att detta mål kommer att nås. Istället är vi på väg mot en katastrofal uppvärmning på mellan 3 och 5 grader.\r\n\r\n";
+					mailBody += "Vår gemensamma livsmiljö är hotad!\r\n";
+					mailBody += "Klimatkrisen måste börja behandlas som den kris den faktiskt är.\r\n";
+					if(proposal) {
+						mailBody += "Det finns ett initiativ i vår kommun för att utlysa klimatnödläge.\r\n";
+						mailBody += "Initiativet hittar ni här: " + proposal + "\r\n";
+						mailBody += "Jag stödjer initiativet fullt ut och vädjar till kommunens folkvalda att agera kraftfullt och utlysa nödläge för klimatet i vår kommun.";
+					}
+				}
+				
 				var mailContent = "Subject=Utlys klimatnödläge nu!&";
-				mailContent += "body=" + formattedBody;
+				mailContent += "body=" + encodeURIComponent(mailBody);
 				mailContent = mailToLink + "?" + mailContent;
 				return mailContent;
 			}
@@ -143,43 +157,41 @@ Om vi ska kunna se kommande generationer i ögonen är det dags att agera nu. Vi
 			feature.properties.discussion_status = discussion_status(feature.properties['ref:se:kommun:kod']);
 			var c = feature.properties.ced == 1 ? 'har' : 'har inte';
 			var municipal_info = municipalContactLookup(feature.properties['ref:se:kommun:kod']);
+			
 			var d = feature.properties.discussion_status == 1 ? 'pågår' : 'pågår inte';
 			var popupContent = "<p style='color: red;'><strong>" + feature.properties['name'] + " " + c + " deklarerat klimatnödläge!</strong></p>";
-			if(municipal_info.citizen_proposal){
-				popupContent += "<p style='color: green;'><strong>Hurra! det " + d + " en process om att utlysa klimatnödläge!</strong></p>";
-				popupContent += "<p>Du kan läsa mer om processen och vad du som medborgare kan göra <a target='_blank' href='" + municipal_info.citizen_proposal + "'>här.</a></p>"
+			var fillColor;
+			if(municipal_info.ced_status == 1){
+				//Grön kommun
+				fillColor = {fillColor: '#1CA549'};
+				popupContent += "<p style='color: #1CA549;'>JIPPI!</p>";
 			}
-			if(!municipal_info.citizen_proposal && municipal_info.discussion_status == 1){
-				popupContent += "<p style='color: green;'><strong>Hurra! det " + d + " en process om att utlysa klimatnödläge!</strong></p>";
+			else if(municipal_info.ced_status == 2){
+				//Röd kommun + skicka mail #2
+				fillColor = {fillColor: '#FF3300'};
+				popupContent += "<p style='color: red;'><strong>" + feature.properties['name'] + " har aktivt röstat NEJ till att utlysa klimatnödläge :(</strong></p>";
+				popupContent += "<p>Sätt ytterligare press på kommunen genom att <a href='mailto:" + prepareEmail(feature.properties['ref:se:kommun:kod'], 2, municipal_info.citizen_proposal) + "'>skicka ett mail</a> där du meddelar att du stödjer kravet på att ytlysa klimatnödläge!</p>";
 			}
-			if(municipal_info.citizen_suggest_link && !municipal_info.citizen_proposal){
-				popupContent += "<p>Bor du i " + feature.properties.name + " så kan du lämna in ett e-förslag <a target='_blank' href='" + municipal_info.citizen_suggest_link + "'>här.</a></p>"
+			else if(municipal_info.ced_status == 0 && municipal_info.discussion_status == 0){
+				//Grå kommun + skicka mail #1
+				fillColor = {fillColor: '#F2F2F2'};
+				popupContent += "<p>Just nu pågår ingen diskussion om att utlysa klimatnödläge :(</p>";
+				if(municipal_info.citizen_suggest_link){
+					popupContent += "<p>Som invånare kan du lämna ett förslag till kommunen <a target='_blank' href='" + municipal_info.citizen_suggest_link + "'>här.</a></p>";
+				}
+				popupContent += "Skicka <a href='mailto:" + prepareEmail(feature.properties['ref:se:kommun:kod'], 1) + "'>ett mail</a> till kommunen med krav på ytlysande av klimatnödläge!</p>";
+				popupContent += '<button type="submit" class="ced-form-open btn btn-sm btn-success">Hjälp oss samla in data!</button>';
 			}
-			if(feature.properties.ced == 0){
-				popupContent += "<p>Sätt press på " + feature.properties['name'] + " genom att skicka ett mail där du kräver att kommunen utlyser klimatnödläge!</p>";
-				popupContent += "<a href='mailto:" + prepareEmail(feature.properties['ref:se:kommun:kod']) + "'>Klicka här för att öppna ett färdigt mail.</a></p>";
+			else if(municipal_info.ced_status == 0 && municipal_info.discussion_status == 1){
+				//Gul kommun + mail #2
+				fillColor = {fillColor: '#FFCC00'};
+				popupContent += "<p>Just nu pågår en diskussion om att utlysa klimatnödläge :)</p>";
+				if(municipal_info.citizen_proposal){
+					popupContent += "<p>Du kan läsa mer om processen och vad du som invånare kan göra <a target='_blank' href='" + municipal_info.citizen_proposal + "'>här.</a></p>";
+				}
+				popupContent += "<p>Sätt ytterligare press på kommunen genom att <a href='mailto:" + prepareEmail(feature.properties['ref:se:kommun:kod'], 2, municipal_info.citizen_proposal) + "'>skicka ett mail</a> där du meddelar att du stödjer kravet på att ytlysa klimatnödläge!</p>";
 			}
 
-			var fillColor;
-			
-			if(feature.properties.discussion_status == 1 && feature.properties.ced != 2){
-				fillColor = {fillColor: '#FFCC00'};
-			} else {
-				switch(true) {
-					case (feature.properties.ced == 0):
-						fillColor = {fillColor: '#F2F2F2'};
-						break;
-					case (feature.properties.ced == 1):
-						fillColor = {fillColor: '#1CA549'};
-						break;
-					case (feature.properties.ced == 2):
-						fillColor = {fillColor: '#FF3300'};
-						break;
-					default:
-						fillColor = {fillColor: '#F2F2F2'};
-				}
-			}
-			
 			layer.setStyle(fillColor);
 
 			if (feature.properties && feature.properties.popupContent) {
@@ -191,6 +203,9 @@ Om vi ska kunna se kommande generationer i ögonen är det dags att agera nu. Vi
 			layer.on('popupopen', function(e){
 				$('#municipal').val(e.target._leaflet_id); // Select the option with a value of '1'
 				$('#municipal').trigger('change'); // Notify any JS components that the value changed
+				$(".ced-form-open").click(function(){
+					$("#ced-form-container").show();
+				});
 			});
 
 			s.push({[feature.properties["ref:se:kommun:kod"]]:{
@@ -288,16 +303,24 @@ Om vi ska kunna se kommande generationer i ögonen är det dags att agera nu. Vi
     		showCount: false,
     		shares: ["email", "twitter", "facebook", "linkedin"]
 		});
-		$("#shareRoundIcons").append('<a rel="license" target="_blank" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons Licence" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a></a>.');
-		$("#shareRoundIcons").append('<br /><a target="_blank" href="https://github.com/bjarman/cedmap" style="color: black; font-size: 25px;"><i class="fa fa-github"></i></a>');
-		$("#shareRoundIcons").prepend('<button id="ced-form-open" type="submit" class="btn btn-success">Hjälp oss samla in data!</button>');
+		
+		$("#shareRoundIcons").append('<a target="_blank" href="https://github.com/bjarman/cedmap" style="color: black; font-size: 25px;"><i class="fa fa-github"></i></a><br />');
+		$("#shareRoundIcons").append('<a target="blank_" href="http://www.cccoders.org" alt="Climate Change Coders"><img width="88px" height="31px" id="cccoders-logo" src=""/></a><br /><br />');
+
+  		$("#cccoders-logo").attr("src", "data:image/svg+xml;base64," + window.btoa('<svg width="216px" height="76px" viewBox="0 0 216 76" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="Group"><rect id="Rectangle" fill="#5700FF" x="0" y="0" width="216" height="76" rx="8"></rect><text id="01101000-01110100-01" fill-opacity="0.5" fill="#FFFFFF" font-family="Courier" font-size="10" font-weight="normal"><tspan x="2.98291016" y="11">01101000 01110100 01110100 01110000 </tspan><tspan x="2.98291016" y="23">00111010 00101111 00101111 01110111 </tspan><tspan x="2.98291016" y="35">01110111 01110111 00101110 01100011 </tspan><tspan x="2.98291016" y="47">01100011 01100011 01101111 01100100 </tspan><tspan x="2.98291016" y="59">01100101 01110010 01110011 00101110 </tspan><tspan x="29.9873047" y="71">01101111 01110010 01100111</tspan></text><text id="{cccoders.org}" fill="#FFFFFF" font-family="Courier" font-size="25" font-weight="normal"><tspan x="3.48291016" y="44">{cccoders.org}</tspan></text></g></g></svg>'));
+
+		$("#shareRoundIcons").append('<a rel="license" target="_blank" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons Licence" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a></a><br /><br />');
+		
+		$("#shareRoundIcons").append('<button type="submit" class="ced-form-open btn btn-sm btn-success">Hjälp oss samla in data!</button>');
+		$("#ccoders-logo").attr("src", $("#ccoders-logo-svg").html());
 		var $code_options = $("#municipal > option").clone();
 		$("#code").append($code_options);
 		$('#code').select2({
 			width: '100%',
 			dropdownParent: $("#ced-form")
 		});
-		$("#ced-form-open").click(function(){
+		$(".ced-form-open").click(function(){
+			console.log("click");
 			$("#ced-form-container").show();
 		});
 		$('window').preloader();
