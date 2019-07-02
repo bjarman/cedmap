@@ -3,16 +3,18 @@
 <head>
 	<title>Vilka kommuner har deklarerat klimatnödläge?</title>
 	<meta charset="utf-8" />
-	<meta name="description" content="Karta som visar vilka kommuner i Sverige som deklarerat klimatnödläge. #parentsforfuture #fridaysforfuture #climateemergencydeclaration #klimatnödläge">
+	<meta name="description" content="Karta som visar vilka kommuner i Sverige som utlyst klimatnödläge. #parentsforfuture #fridaysforfuture #climateemergencydeclaration #klimatnödläge">
   	<meta name="keywords" content="klimatnödläge, klimataktivism, parents for future, fridays for future">
   	<meta name="author" content="https://github.com/bjarman">
   	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!--<link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />-->
+	<script type="text/javascript" sr="//unpkg.com/popper.js"></script>
     <link rel="stylesheet" href="//unpkg.com/leaflet@1.5.1/dist/leaflet.css"/>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <script type="text/javascript" src="//unpkg.com/leaflet@1.5.1/dist/leaflet.js"></script>
 	<script type="text/javascript" src="//code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.bundle.min.js" integrity="sha384-VoPFvGr9GxhDT3n8vqqZ46twP5lgex+raTCfICQy73NLhN7ZqSfCtfSn4mLA2EFA" crossorigin="anonymous"></script>
 	<script type="text/javascript">
 			!function(e){e.fn.preloader=function(t){function r(){c=e(i.selector)}function n(){switch(i.type){case"document":default:setTimeout(function(){o()},i.delay)}}function o(){switch(i.removeType){case"fade":a();break;case"remove":default:u()}}function u(){return c.remove()}function a(){return c.fadeOut(i.fadeDuration,f())}function f(){return function(){c.remove()}}var i=e.extend({selector:"#preloader",type:"document",removeType:"fade",fadeDuration:750,delay:0},t),c=null;return r(),this.ready(function(){e(this).trigger("preloader:before"),n(),e(this).trigger("preloader:after")})}}(jQuery);
 
@@ -41,6 +43,10 @@
 		var municipal_array = [];
 		var municipal_id;
 		var municipal_code_array = [];
+		var yellow_number = Number(0);
+		var yellow_population = Number(0);
+		var total_number = Number(0);
+		var total_population = Number(0);
 
 		$(document).ready(function() {
 			$('window').preloader();
@@ -151,16 +157,22 @@
 		var s = [];
 		var map = L.map('map', {minZoom: 5, maxZoom: 8}).setView([63.020557650316576, 18.092765808105472], 5);
 		var ol = [];
-
+		
+		
+		
 		function onEachFeature(feature, layer) {
+
 			L.stamp(layer);
 			feature.properties.ced = ced_status(feature.properties['ref:se:kommun:kod']);
 			feature.properties.discussion_status = discussion_status(feature.properties['ref:se:kommun:kod']);
 			var c = feature.properties.ced == 1 ? 'har' : 'har inte';
 			var municipal_info = municipalContactLookup(feature.properties['ref:se:kommun:kod']);
 			
+			total_number++;
+			total_population = total_population + parseInt(municipal_info.population.replace(/ /g, ''));
+			
 			var d = feature.properties.discussion_status == 1 ? 'pågår' : 'pågår inte';
-			var popupContent = "<p style='color: red;'><strong>" + feature.properties['name'] + " " + c + " deklarerat klimatnödläge!</strong></p>";
+			var popupContent = "<p style='color: red;'><strong>" + feature.properties['name'] + " " + c + " utlyst klimatnödläge!</strong></p>";
 			var fillColor;
 			if(municipal_info.ced_status == 1){
 				//Grön kommun
@@ -185,6 +197,8 @@
 			}
 			else if(municipal_info.ced_status == 0 && municipal_info.discussion_status == 1){
 				//Gul kommun + mail #2
+				yellow_number++;
+				yellow_population = yellow_population + parseInt(municipal_info.population.replace(/ /g, ''));
 				fillColor = {fillColor: '#FFCC00'};
 				popupContent += "<p>Just nu pågår en diskussion om att utlysa klimatnödläge :)</p>";
 				if(municipal_info.citizen_proposal){
@@ -192,13 +206,12 @@
 				}
 				popupContent += "<p>Sätt ytterligare press på kommunen genom att <a href='mailto:" + prepareEmail(feature.properties['ref:se:kommun:kod'], 2, municipal_info.citizen_proposal) + "'>skicka ett mail</a> där du meddelar att du stödjer kravet på att ytlysa klimatnödläge!</p>";
 			}
-
 			layer.setStyle(fillColor);
 
 			if (feature.properties && feature.properties.popupContent) {
 				popupContent += feature.properties.popupContent;
 			}
-
+			
 			layer.bindPopup(popupContent);
 
 			layer.on('popupopen', function(e){
@@ -248,7 +261,7 @@
 
 		var legend2 = L.control({position: 'bottomright'});
 	 	legend2.onAdd = function (map, ol) {
-	    	var div = L.DomUtil.create('div', 'info legend');
+	    	var div = L.DomUtil.create('div', 'info legend mobile-hide');
 	    	var shareContent ='<div id="shareRoundIcons"></div>';
 	    	div.innerHTML = shareContent;
 	    	div.firstChild.onmousedown = div.firstChild.ondblclick = L.DomEvent.stopPropagation;
@@ -256,6 +269,34 @@
 		};
 
 		legend2.addTo(map);
+		
+		var legend3 = L.control({position: 'topright'});
+		legend3.onAdd = function(){
+			var div = L.DomUtil.create('div', 'info legend colorcodes mobile-hide');
+			//var divContent = "Vi har en påbörjad process i " + yellow_number + " kommuner med " + yellow_population + " invånare. " + (yellow_population/total_population*100).toFixed(2) + "% av befolkningen, " + (yellow_number/total_number*100).toFixed(2) + "% av kommunerna.";
+			var divContent = "<i style='background: #F2F2F2;'></i> Ingen process<br /><i style='background: #FFCC00;'></i> Påbörjad process<br /><i style='background: #1CA549;'></i> Ja till klimatnödläge<br /><i style='background: #FF3300;'></i> Nej till klimatnödläge<br /><div id='stats'></div>";
+			//divContent += '<div class="btn-group btn-group-sm btn-group-vertical" role="group" aria-label="Basic example"><button type="submit" class="ced-form-open btn btn-success"><i class="fa fa-cog"></i> Hjälp oss samla in data!</button><button type="button" class="btn btn-danger"><i class="fa fa-info-circle"></i> Vad är klimatnödläge?</button><button type="button" class="btn btn-info"><i class="fa fa-info-circle"></i> Mall</button></div>';
+			div.innerHTML = divContent;
+			div.firstChild.onmousedown = div.firstChild.ondblclick = L.DomEvent.stopPropagation;
+	    	return div;
+		};
+		
+		legend3.addTo(map);
+		
+		var legend4 = L.control({position: 'topright'});
+		legend4.onAdd = function(){
+			var div = L.DomUtil.create('div', 'info legend mobile-hide');
+			//var divContent = "Vi har en påbörjad process i " + yellow_number + " kommuner med " + yellow_population + " invånare. " + (yellow_population/total_population*100).toFixed(2) + "% av befolkningen, " + (yellow_number/total_number*100).toFixed(2) + "% av kommunerna.";
+			//var divContent = "<i style='background: #F2F2F2;'></i> Ingen process<br /><i style='background: #FFCC00;'></i> Påbörjad process<br /><i style='background: #1CA549;'></i> Ja till klimatnödläge<br /><i style='background: #FF3300;'></i> Nej till klimatnödläge<br /><div id='stats'></div>";
+			var divContent = '<div id="infobuttons" class="btn-group btn-group-sm btn-group-vertical" role="group" aria-label=""><button type="submit" class="ced-form-open btn btn-success text-left"><i class="fa fa-cog"></i> Datainsamling</button><button type="button" class="btn btn-danger text-left"><i class="fa fa-info-circle"></i> Klimatnödläge?</button><button type="button" class="btn btn-info text-left"><i class="fa fa-info-circle"></i> Mall</button></div>';
+			div.innerHTML = divContent;
+			div.firstChild.onmousedown = div.firstChild.ondblclick = L.DomEvent.stopPropagation;
+	    	return div;
+		};
+		
+		legend4.addTo(map);
+		
+		
 		L.control.scale().addTo(map);
 
 		map.on('layeradd', function(e) {
@@ -317,7 +358,10 @@
 
 		$("#shareRoundIcons").append('<a rel="license" target="_blank" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons Licence" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a></a><br /><br />');
 		
-		$("#shareRoundIcons").append('<button type="submit" class="ced-form-open btn btn-sm btn-success">Hjälp oss samla in data!</button>');
+		//$("#shareRoundIcons").append('<div class="btn-group btn-group-sm btn-group-vertical" role="group" aria-label="Basic example"><button type="submit" class="ced-form-open btn btn-success"><i class="fa fa-cog"></i> Hjälp oss samla in data!</button><button type="button" class="btn btn-danger"><i class="fa fa-info-circle"></i> Vad är klimatnödläge?</button><button type="button" class="btn btn-info"><i class="fa fa-info-circle"></i> Mall</button></div>');
+		
+		//$("#shareRoundIcons").append('<div class="dropdown" id=“infolinks”><button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Vad är klimatnödläge?</button><div class="dropdown-menu" aria-labelledby="dropdownMenuButton"><a class="dropdown-item" href="#">Om klimatnödläge</a><a class="dropdown-item" href="#">Mall</a></div></div>');
+		
 		$("#ccoders-logo").attr("src", $("#ccoders-logo-svg").html());
 		//var $code_options = $("#municipal > option").clone();
 
@@ -337,6 +381,7 @@
 			console.log("click");
 			$("#ced-form-container").show();
 		});
+		$("#stats").html("Pågående processer i <strong>" + yellow_number + "</strong> kommuner med <strong>" + yellow_population + "</strong> invånare. <strong>" + (yellow_population/total_population*100).toFixed(2) + "%</strong> av befolkningen, <strong>" + (yellow_number/total_number*100).toFixed(2) + "%</strong> av kommunerna");
 		$('window').preloader();
 	}
 
@@ -375,7 +420,6 @@
 	$("#abort").click(function(){
 		$("#ced-form-container").hide();
 	});
-
 });
 </script>
 	<style>
@@ -475,11 +519,43 @@
 			background: rgba(255, 255, 255, .8);
 			display: none;
 		}
+		.colorcodes {
+
+    padding: 6px 8px;
+    font: 12px/1.5 "Helvetica Neue", Arial, Helvetica, sans-serif;
+    background: white;
+    background: rgba(255,255,255,1);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 5px;
+	text-align: left;
+    line-height: 18px;
+    color: #555;
+    width: 168px;
+		}
+		.colorcodes i {
+    width: 18px;
+    height: 18px;
+    float: left;
+    margin-right: 8px;
+    opacity: 1;
+}
+#stats {
+	text-align: left;
+	border-top: 1px solid #F2F2F2;
+	margin-top: 5px;
+}
+#infobuttons {
+	width: 168px;
+	text-align: left;
+}
+@media only screen and (max-width: 479px) {
+   .mobile-hide{ display: none !important; }
+}
 	</style>
 </head>
 <body>
 	<div id="preloader">
-  	<div id="preloader-inner"></div>
+  		<div id="preloader-inner"></div>
 	</div>
 	<div id='map'></div>
 	<div id="ced-form-container">
