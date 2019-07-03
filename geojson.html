@@ -176,18 +176,18 @@
 			var fillColor;
 			if(municipal_info.ced_status == 1){
 				//Grön kommun
-				fillColor = {fillColor: '#1CA549'};
+				fillColor = {fillColor: '#1CA549', fillOpacity: '0.9'};
 				popupContent += "<p style='color: #1CA549;'>JIPPI!</p>";
 			}
 			else if(municipal_info.ced_status == 2){
 				//Röd kommun + skicka mail #2
-				fillColor = {fillColor: '#FF3300'};
+				fillColor = {fillColor: '#FF3300', fillOpacity: '0.9'};
 				popupContent += "<p style='color: red;'><strong>" + feature.properties['name'] + " har aktivt röstat NEJ till att utlysa klimatnödläge :(</strong></p>";
 				popupContent += "<p>Sätt ytterligare press på kommunen genom att <a href='mailto:" + prepareEmail(feature.properties['ref:se:kommun:kod'], 2, municipal_info.citizen_proposal) + "'>skicka ett mail</a> där du meddelar att du stödjer kravet på att ytlysa klimatnödläge!</p>";
 			}
 			else if(municipal_info.ced_status == 0 && municipal_info.discussion_status == 0){
 				//Grå kommun + skicka mail #1
-				fillColor = {fillColor: '#F2F2F2'};
+				fillColor = {fillColor: '#F2F2F2', fillOpacity: '0.9'};
 				popupContent += "<p>Just nu pågår ingen diskussion om att utlysa klimatnödläge :(</p>";
 				if(municipal_info.citizen_suggest_link){
 					popupContent += "<p>Som invånare kan du lämna ett förslag till kommunen <a target='_blank' href='" + municipal_info.citizen_suggest_link + "'>här.</a></p>";
@@ -199,7 +199,7 @@
 				//Gul kommun + mail #2
 				yellow_number++;
 				yellow_population = yellow_population + parseInt(municipal_info.population.replace(/ /g, ''));
-				fillColor = {fillColor: '#FFCC00'};
+				fillColor = {fillColor: '#FFCC00', fillOpacity: '0.94'};
 				popupContent += "<p>Just nu pågår en diskussion om att utlysa klimatnödläge :)</p>";
 				if(municipal_info.citizen_proposal){
 					popupContent += "<p>Du kan läsa mer om processen och vad du som invånare kan göra <a target='_blank' href='" + municipal_info.citizen_proposal + "'>här.</a></p>";
