@@ -71,19 +71,19 @@
 					mailBody += "4. Erkänna att nödläget varar tills världens nationer säkerställt att målet att den globala uppvärmningen inte passerar ödesdigra 1,5 grader, i enlighet med Parisavtalet.\r\n";
 					mailBody += "5. Fastställa att kommunen enligt klimatnödlägesplanen prioriterar att samarbeta med andra kommuner internationellt och nationellt för att bygga upp kompetens och ta kompensatoriskt ansvar för en snabb omställning tills högre politiker tar sitt fulla ansvar för omställningen till en hållbar framtid. Om vi ska kunna se kommande generationer i ögonen är det dags att agera nu. Vi vill som aktiva och ansvarstagande medborgare stå bakom våra politiker i den omställning som kommer att krävas.\r\n";
 				}
-				
+
 				if(mail_id == 2){
 					mailBody += contact["name"] + " behöver utlysa klimatnödläge!\r\n";
 					mailBody += "Jag är starkt oroade över att inte tillräckliga åtgärder vidtas för att bryta den snabba utvecklingen mot klimatkatastrof, utarmningen av jorden och utrotning av djur och växter. I Parisavtalet 2015 beslutade världens nationer att temperaturökningen bör begränsas till max 1,5 grader. Utifrån de åtgärder som hittills utlovats globalt tyder dock ingenting på att detta mål kommer att nås. Istället är vi på väg mot en katastrofal uppvärmning på mellan 3 och 5 grader.\r\n\r\n";
 					mailBody += "Vår gemensamma livsmiljö är hotad!\r\n";
 					mailBody += "Klimatkrisen måste börja behandlas som den kris den faktiskt är.\r\n";
 					if(proposal) {
-						mailBody += "Det finns ett initiativ i vår kommun för att utlysa klimatnödläge.\r\n";
+						mailBody += "Det finns ett initiativ i kommunen för att utlysa klimatnödläge.\r\n";
 						mailBody += "Initiativet hittar ni här: " + proposal + "\r\n";
-						mailBody += "Jag stödjer initiativet fullt ut och vädjar till kommunens folkvalda att agera kraftfullt och utlysa nödläge för klimatet i vår kommun.";
+						mailBody += "Jag stödjer initiativet fullt ut och vädjar till kommunens folkvalda att agera kraftfullt och utlysa nödläge för klimatet kommunen.";
 					}
 				}
-				
+
 				var mailContent = "Subject=Utlys klimatnödläge nu!&";
 				mailContent += "body=" + encodeURIComponent(mailBody);
 				mailContent = mailToLink + "?" + mailContent;
@@ -157,9 +157,9 @@
 		var s = [];
 		var map = L.map('map', {minZoom: 5, maxZoom: 8}).setView([63.020557650316576, 18.092765808105472], 5);
 		var ol = [];
-		
-		
-		
+
+
+
 		function onEachFeature(feature, layer) {
 
 			L.stamp(layer);
@@ -167,10 +167,10 @@
 			feature.properties.discussion_status = discussion_status(feature.properties['ref:se:kommun:kod']);
 			var c = feature.properties.ced == 1 ? 'har' : 'har inte';
 			var municipal_info = municipalContactLookup(feature.properties['ref:se:kommun:kod']);
-			
+
 			total_number++;
 			total_population = total_population + parseInt(municipal_info.population.replace(/ /g, ''));
-			
+
 			var d = feature.properties.discussion_status == 1 ? 'pågår' : 'pågår inte';
 			var popupContent = "<p style='color: red;'><strong>" + feature.properties['name'] + " " + c + " utlyst klimatnödläge!</strong></p>";
 			var fillColor;
@@ -211,7 +211,7 @@
 			if (feature.properties && feature.properties.popupContent) {
 				popupContent += feature.properties.popupContent;
 			}
-			
+
 			layer.bindPopup(popupContent);
 
 			layer.on('popupopen', function(e){
@@ -238,7 +238,7 @@
 				municipal: feature.properties['name'],
 				code: feature.properties["ref:se:kommun:kod"]
 			});
-			
+
 			legend.update(feature.properties['name'], layer._leaflet_id);
 		}
 
@@ -261,7 +261,7 @@
 
 		var legend2 = L.control({position: 'bottomright'});
 	 	legend2.onAdd = function (map, ol) {
-	    	var div = L.DomUtil.create('div', 'info legend mobile-hide');
+	    	var div = L.DomUtil.create('div', 'info legend');
 	    	var shareContent ='<div id="shareRoundIcons"></div>';
 	    	div.innerHTML = shareContent;
 	    	div.firstChild.onmousedown = div.firstChild.ondblclick = L.DomEvent.stopPropagation;
@@ -269,7 +269,18 @@
 		};
 
 		legend2.addTo(map);
-		
+
+		var legend4 = L.control({position: 'bottomright'});
+	 	legend4.onAdd = function (map, ol) {
+	    	var div = L.DomUtil.create('div', 'info legend mobile-hide');
+	    	var shareContent ='<div id="codebuttons"></div>';
+	    	div.innerHTML = shareContent;
+	    	div.firstChild.onmousedown = div.firstChild.ondblclick = L.DomEvent.stopPropagation;
+	    	return div;
+		};
+
+		legend4.addTo(map);
+
 		var legend3 = L.control({position: 'topright'});
 		legend3.onAdd = function(){
 			var div = L.DomUtil.create('div', 'info legend colorcodes mobile-hide');
@@ -278,9 +289,9 @@
 			div.firstChild.onmousedown = div.firstChild.ondblclick = L.DomEvent.stopPropagation;
 	    	return div;
 		};
-		
+
 		legend3.addTo(map);
-		
+
 		var legend4 = L.control({position: 'topright'});
 		legend4.onAdd = function(){
 			var div = L.DomUtil.create('div', 'info legend mobile-hide');
@@ -289,10 +300,10 @@
 			div.firstChild.onmousedown = div.firstChild.ondblclick = L.DomEvent.stopPropagation;
 	    	return div;
 		};
-		
+
 		legend4.addTo(map);
-		
-		
+
+
 		L.control.scale().addTo(map);
 
 		map.on('layeradd', function(e) {
@@ -346,18 +357,18 @@
     		showCount: false,
     		shares: ["email", "twitter", "facebook", "linkedin"]
 		});
-		
-		$("#shareRoundIcons").append('<a target="_blank" href="https://github.com/bjarman/cedmap" style="color: black; font-size: 25px;"><i class="fa fa-github"></i></a><br />');
-		$("#shareRoundIcons").append('<a target="blank_" href="http://www.cccoders.org" alt="Climate Change Coders"><img width="88px" height="31px" id="cccoders-logo" src=""/></a><br /><br />');
+
+		$("#codebuttons").append('<a target="_blank" href="https://github.com/bjarman/cedmap" style="color: black; font-size: 25px;"><i class="fa fa-github"></i></a><br />');
+		$("#codebuttons").append('<a target="blank_" href="http://www.cccoders.org" alt="Climate Change Coders"><img width="88px" height="31px" id="cccoders-logo" src=""/></a><br /><br />');
 
   		$("#cccoders-logo").attr("src", "data:image/svg+xml;base64," + window.btoa('<svg width="216px" height="76px" viewBox="0 0 216 76" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="Group"><rect id="Rectangle" fill="#5700FF" x="0" y="0" width="216" height="76" rx="8"></rect><text id="01101000-01110100-01" fill-opacity="0.5" fill="#FFFFFF" font-family="Courier" font-size="10" font-weight="normal"><tspan x="2.98291016" y="11">01101000 01110100 01110100 01110000 </tspan><tspan x="2.98291016" y="23">00111010 00101111 00101111 01110111 </tspan><tspan x="2.98291016" y="35">01110111 01110111 00101110 01100011 </tspan><tspan x="2.98291016" y="47">01100011 01100011 01101111 01100100 </tspan><tspan x="2.98291016" y="59">01100101 01110010 01110011 00101110 </tspan><tspan x="29.9873047" y="71">01101111 01110010 01100111</tspan></text><text id="{cccoders.org}" fill="#FFFFFF" font-family="Courier" font-size="25" font-weight="normal"><tspan x="3.48291016" y="44">{cccoders.org}</tspan></text></g></g></svg>'));
 
-		$("#shareRoundIcons").append('<a rel="license" target="_blank" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons Licence" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a></a><br /><br />');
-		
+		$("#codebuttons").append('<a rel="license" target="_blank" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons Licence" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a></a><br /><br />');
+
 		//$("#shareRoundIcons").append('<div class="btn-group btn-group-sm btn-group-vertical" role="group" aria-label="Basic example"><button type="submit" class="ced-form-open btn btn-success"><i class="fa fa-cog"></i> Hjälp oss samla in data!</button><button type="button" class="btn btn-danger"><i class="fa fa-info-circle"></i> Vad är klimatnödläge?</button><button type="button" class="btn btn-info"><i class="fa fa-info-circle"></i> Mall</button></div>');
-		
+
 		//$("#shareRoundIcons").append('<div class="dropdown" id=“infolinks”><button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Vad är klimatnödläge?</button><div class="dropdown-menu" aria-labelledby="dropdownMenuButton"><a class="dropdown-item" href="#">Om klimatnödläge</a><a class="dropdown-item" href="#">Mall</a></div></div>');
-		
+
 		$("#ccoders-logo").attr("src", $("#ccoders-logo-svg").html());
 		//var $code_options = $("#municipal > option").clone();
 
