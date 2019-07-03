@@ -273,9 +273,7 @@
 		var legend3 = L.control({position: 'topright'});
 		legend3.onAdd = function(){
 			var div = L.DomUtil.create('div', 'info legend colorcodes mobile-hide');
-			//var divContent = "Vi har en påbörjad process i " + yellow_number + " kommuner med " + yellow_population + " invånare. " + (yellow_population/total_population*100).toFixed(2) + "% av befolkningen, " + (yellow_number/total_number*100).toFixed(2) + "% av kommunerna.";
 			var divContent = "<i style='background: #F2F2F2;'></i> Ingen process<br /><i style='background: #FFCC00;'></i> Påbörjad process<br /><i style='background: #1CA549;'></i> Ja till klimatnödläge<br /><i style='background: #FF3300;'></i> Nej till klimatnödläge<br /><div id='stats'></div>";
-			//divContent += '<div class="btn-group btn-group-sm btn-group-vertical" role="group" aria-label="Basic example"><button type="submit" class="ced-form-open btn btn-success"><i class="fa fa-cog"></i> Hjälp oss samla in data!</button><button type="button" class="btn btn-danger"><i class="fa fa-info-circle"></i> Vad är klimatnödläge?</button><button type="button" class="btn btn-info"><i class="fa fa-info-circle"></i> Mall</button></div>';
 			div.innerHTML = divContent;
 			div.firstChild.onmousedown = div.firstChild.ondblclick = L.DomEvent.stopPropagation;
 	    	return div;
@@ -286,9 +284,7 @@
 		var legend4 = L.control({position: 'topright'});
 		legend4.onAdd = function(){
 			var div = L.DomUtil.create('div', 'info legend mobile-hide');
-			//var divContent = "Vi har en påbörjad process i " + yellow_number + " kommuner med " + yellow_population + " invånare. " + (yellow_population/total_population*100).toFixed(2) + "% av befolkningen, " + (yellow_number/total_number*100).toFixed(2) + "% av kommunerna.";
-			//var divContent = "<i style='background: #F2F2F2;'></i> Ingen process<br /><i style='background: #FFCC00;'></i> Påbörjad process<br /><i style='background: #1CA549;'></i> Ja till klimatnödläge<br /><i style='background: #FF3300;'></i> Nej till klimatnödläge<br /><div id='stats'></div>";
-			var divContent = '<div id="infobuttons" class="btn-group btn-group-sm btn-group-vertical" role="group" aria-label=""><button type="submit" class="ced-form-open btn btn-success text-left"><i class="fa fa-cog"></i> Datainsamling</button><button type="button" class="btn btn-danger text-left"><i class="fa fa-info-circle"></i> Klimatnödläge?</button><button type="button" class="btn btn-info text-left"><i class="fa fa-info-circle"></i> Mall</button></div>';
+			var divContent = '<div id="infobuttons" class="btn-group btn-group-sm btn-group-vertical" role="group" aria-label=""><button type="submit" class="ced-form-open btn btn-success text-left"><i class="fa fa-cog"></i> Datainsamling</button><button type="button" class="btn btn-danger text-left document-link" value="https://parents4future.se/cedmap/doc/Klimatnodlage.pdf"><i class="fa fa-info-circle"></i> Klimatnödläge?</button><button type="button" class="btn btn-info text-left document-link" value="https://parents4future.se/cedmap/doc/Klimatnodlage_1.pdf"><i class="fa fa-info-circle"></i> Klimatnödläge (mall)</button></div>';
 			div.innerHTML = divContent;
 			div.firstChild.onmousedown = div.firstChild.ondblclick = L.DomEvent.stopPropagation;
 	    	return div;
@@ -380,6 +376,9 @@
 		$(".ced-form-open").click(function(){
 			console.log("click");
 			$("#ced-form-container").show();
+		});
+		$(".document-link").click(function(){
+			window.open($(this).attr('value'), '_blank');
 		});
 		$("#stats").html("Pågående processer i <strong>" + yellow_number + "</strong> kommuner med <strong>" + yellow_population + "</strong> invånare. <strong>" + (yellow_population/total_population*100).toFixed(2) + "%</strong> av befolkningen, <strong>" + (yellow_number/total_number*100).toFixed(2) + "%</strong> av kommunerna");
 		$('window').preloader();
